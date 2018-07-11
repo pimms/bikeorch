@@ -32,6 +32,7 @@ pull_latest() {
     IMG_NAME=$1
     LOCAL_PORT=$2
     IMG_PORT=$3
+    EXTRA_ARGS=($@)
 
     echo "Pulling latest image: $IMG_NAME"
     docker pull $ECS_DOCKER_REPO/$IMG_NAME:latest > $SD/dockerlog
@@ -47,8 +48,7 @@ pull_latest() {
             docker rm $IMG_NAME || exit 1
         fi
 
-        # NOTE: The env-vars are only required by 'bikeapi'.
-        docker run "--name=$IMG_NAME" -d -p "$LOCAL_PORT:$IMG_PORT" -e "OBS_API_SECRET=$OBS_API_SECRET" -e "TSDB_URL=http://biketsdb.stienjoa.kim:4242" "$ECS_DOCKER_REPO/$IMG_NAME" || exit 1
+        docker run "--name=$IMG_NAME" -d -p "$LOCAL_PORT:$IMG_PORT" ${EXTRA_ARGS[@]:3} "$ECS_DOCKER_REPO/$IMG_NAME" || exit 1
         send_notif $IMG_NAME
 
         echo "Started new instance of image: $IMG_NAME"
@@ -58,7 +58,7 @@ pull_latest() {
 }
 
 log_in
-pull_latest bikeproxy 80 2000
-pull_latest bikeapi 2001 2001
+pull_latest bikeproxy 80 80 --net="host"
+pull_latest bikeapi 2001 2001 -e "OBS_API_SECRET=$OBS_API_SECRET" -e "TSDB_URL=http://biketsdb.stienjoa.kim:4242"
 pull_latest bikeweb 2002 2002
 
