@@ -12,3 +12,5 @@ The following environment variables must be defined system-wide:
     OBS_API_SECRET      The Oslo Bysykkel API-key
     PUSHOVER_TOKEN      Token to Pushover
     PUSHOER_USER        User in Pushover
+
+_(Note to me in the future: I put this in ~/.bash_profile on my machine.)_
