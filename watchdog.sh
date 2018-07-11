@@ -25,6 +25,11 @@ if [ $app_ok -ne 0 ]; then
     BAD_APPS+=('bikeproxy')
 fi
 
+check_app opentsdb
+if [ $app_ok -ne 0 ]; then
+    BAD_APPS+=('opentsdb')
+fi
+
 if [ ${#BAD_APPS[@]} -ne 0 ]; then
     echo BAD APPS: ${BAD_APPS[@]}
     TITLE="Bike Alert!"
