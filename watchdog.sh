@@ -4,7 +4,7 @@ SD="$( cd "$(dirname "$0")" ; pwd -P )"
 
 check_app() {
     IMG_NAME=$1
-    docker ps | grep "$ECS_DOCKER_REPO/$IMG_NAME" 2>&1 > /dev/null
+    docker ps | grep "$IMG_NAME" 2>&1 > /dev/null
     app_ok=$?
 }
 
